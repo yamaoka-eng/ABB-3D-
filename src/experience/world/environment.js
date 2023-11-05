@@ -35,19 +35,19 @@ export default class Environment {
 
   setSunLight() {
     // 加入平行光
-    this.sunLight = new THREE.DirectionalLight(0xffffff, 3)
+    this.sunLight = new THREE.DirectionalLight(0xffffff, this.obj.intensity)
     this.sunLight.castShadow = true
     this.sunLight.shadow.camera.far = 20
     this.sunLight.shadow.mapSize.set(2048, 2048)
     this.sunLight.shadow.normalBias = 0.05
-    this.sunLight.position.set(-0.5, 3, 0.7)
-    this.sunLight.shadow.radius = 3
+    this.sunLight.position.set(-1, 10, 2)
+    this.sunLight.shadow.radius = 1.5
     this.sunLight.shadow.bias = -0.01
-    this.sunLight.intensity = this.obj.intensity
+    // this.sunLight.intensity = this.obj.intensity
     this.scene.add(this.sunLight)
 
     // 加入环境光
-    this.environmentLight = new THREE.AmbientLight(0xffffff, 1)
+    this.environmentLight = new THREE.AmbientLight(0xffffff, this.obj.intensity)
     this.scene.add(this.environmentLight)
 
     // 加入灯光辅助

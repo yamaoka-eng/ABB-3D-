@@ -17,8 +17,22 @@ export default class Resources extends EventEmitter {
     this.queue = this.assets.length
     this.loaded = 0
 
+    this.setFloor()
     this.setLoaders()
     this.startLoading()
+  }
+
+  setFloor() {
+    this.geometry = new THREE.PlaneGeometry(100, 100)
+    this.material = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      side: THREE.DoubleSide
+    })
+    this.plane = new THREE.Mesh(this.geometry, this.material)
+    this.plane.rotation.x = Math.PI / 2
+    this.plane.receiveShadow = true
+    this.plane.position.y = -0.2
+    this.scene.add(this.plane)
   }
 
   setLoaders() {
@@ -65,7 +79,6 @@ export default class Resources extends EventEmitter {
   singleAssetLoaded(asset, file) {
     this.items[asset.name] = file
     this.loaded++
-    console.log(file)
     if (this.loaded === this.queue) {
       this.emit('all loaded')
     }

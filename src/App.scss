@@ -5,10 +5,38 @@
   }
 }
 
+.preloader {
+  @apply absolute flex justify-center items-center w-[100vw] h-[100vh] z-50 opacity-100 transition-all duration-500 ease-in-out;
+  .loading {
+    @apply flex justify-center items-center;
+  }
+  .circle {
+    @apply w-3 h-3 m-1 rounded-[50%] bg-[var(--color-pink-light)];
+    animation: load 1s ease-in-out infinite;
+  }
+  .circle:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .circle:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  @keyframes load {
+    0% {
+      transform: translateY(0);
+    }
+    20% {
+      transform: translateY(-12px);
+    }
+    40% {
+      transform: translateY(0);
+    }
+  }
+}
+
 .page {
-  @apply z-50 w-full h-full overflow-hidden relative transition-colors duration-1000 ease-in-out;
+  @apply z-50 w-full h-[100vh] relative transition-colors duration-1000 ease-in-out;
   .toggle-bar {
-    @apply fixed flex flex-row justify-center items-center top-12 right-12 z-[99];
+    @apply fixed flex flex-row justify-center items-center top-5 right-5 md:top-12 md:right-12 z-[99];
   }
   .sun-wrapper,
   .moon-wrapper {
@@ -32,25 +60,37 @@
   .page-wrapper {
     @apply relative;
   }
+  .animatedis {
+    @apply translate-y-[100%];
+  }
+  .intro-text {
+    @apply absolute w-full h-full font-medium text-base md:text-lg flex justify-center items-center content-center flex-wrap;
+  }
+  .arrow-svg-warpper {
+    @apply absolute top-[90%] w-full flex items-center justify-center text-4xl font-black transition-all duration-[0.3s] ease-in-out;
+  }
+  .arrow-svg-show {
+    @apply opacity-100;
+  }
   .hero {
-    @apply h-screen w-screen;
+    @apply h-screen w-screen flex flex-col justify-between;
     .hero-wrapper {
       @apply relative h-full mx-auto max-w-[1100px];
       width: calc(100% - 160px);
       .hero-main {
-        @apply absolute bottom-[20rem] left-0;
+        @apply w-full h-full flex flex-col justify-center;
         .hero-main-title {
-          @apply text-6xl;
+          @apply text-5xl md:text-6xl flex flex-wrap;
         }
         .hero-main-description {
-          @apply text-lg;
+          @apply text-lg flex flex-wrap;
         }
       }
       .hero-second {
-        @apply absolute top-[50%] right-0;
-        top: calc(50% - 120px);
+        @apply flex flex-col mb-52 md:mb-96 items-end;
+        top: calc(40% - 120px);
         .hero-second-subheading {
-          @apply text-3xl uppercase;
+          @apply text-2xl md:text-3xl uppercase flex flex-wrap;
         }
       }
     }
@@ -59,11 +99,12 @@
     @apply h-[3000px] w-full;
   }
   .section {
-    @apply w-[50%] py-[1000px] px-[4%] m-0 bg-[var(--color-background)] relative;
+    @apply w-[80%] md:w-[50%] py-[500px] md:py-[1000px] px-[4%] m-0 bg-[var(--color-background)] relative;
     .progress-bar-wrapper {
       @apply absolute top-0 h-full w-3;
       .progress {
-        @apply h-0;
+        @apply absolute top-0 h-[100vh] w-full;
+        transform-origin: top;
       }
     }
     .left-bar {
@@ -73,10 +114,10 @@
       @apply right-0;
     }
   }
-  .left {
+  .left-section {
     @apply mr-auto rounded-tr-[500px] rounded-br-[50px];
   }
-  .right {
+  .right-section {
     @apply ml-auto rounded-tl-[500px] rounded-bl-[50px];
   }
   .section-intro-wrapper {
@@ -111,31 +152,32 @@
   .section-number {
     @apply absolute bottom-[15px] right-0 text-2xl;
   }
-  .blue-text {
-    @apply text-[var(--color-blue)];
-  }
-  .blue-border {
-    @apply border-[var(--color-blue)];
-  }
-  .blue-background {
-    @apply bg-[var(--color-blue)];
-  }
-  .green-text {
-    @apply text-[var(--color-green)];
-  }
-  .green-border {
-    @apply border-[var(--color-green)];
-  }
-  .green-background {
-    @apply bg-[var(--color-green)];
-  }
-  .pink-text {
-    @apply text-[var(--color-pink)];
-  }
-  .pink-border {
-    @apply border-[var(--color-pink)];
-  }
-  .pink-background {
-    @apply bg-[var(--color-pink)];
-  }
+}
+
+.blue-text {
+  @apply text-[var(--color-blue)];
+}
+.blue-border {
+  @apply border-[var(--color-blue)];
+}
+.blue-background {
+  @apply bg-[var(--color-blue)];
+}
+.green-text {
+  @apply text-[var(--color-green)];
+}
+.green-border {
+  @apply border-[var(--color-green)];
+}
+.green-background {
+  @apply bg-[var(--color-green)];
+}
+.pink-text {
+  @apply text-[var(--color-pink)];
+}
+.pink-border {
+  @apply border-[var(--color-pink)];
+}
+.pink-background {
+  @apply bg-[var(--color-pink)];
 }

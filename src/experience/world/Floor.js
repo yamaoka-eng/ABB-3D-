@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import gsap from 'gsap'
 import Experience from '../experience'
 
 export default class Floor {
@@ -10,21 +9,38 @@ export default class Floor {
     this.canvas = this.experience.canvas
     this.camera = this.experience.camera
     this.resources = this.experience.resources
+    this.modelGroup = this.experience.world.room.modelGroup
 
-    this.setFloor()
+    this.setCircles()
   }
 
-  setFloor() {
-    this.geometry = new THREE.PlaneGeometry(100, 100)
-    this.material = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      side: THREE.DoubleSide
-    })
-    this.plane = new THREE.Mesh(this.geometry, this.material)
-    this.plane.rotation.x = Math.PI / 2
-    this.plane.receiveShadow = true
-    this.plane.position.y = -0.2
-    this.scene.add(this.plane)
+  setCircles() {
+    const geometry = new THREE.CircleGeometry(5, 64)
+    const material1 = new THREE.MeshStandardMaterial({ color: 0xe5a1aa })
+    const material2 = new THREE.MeshStandardMaterial({ color: 0x8395cd })
+    const material3 = new THREE.MeshStandardMaterial({ color: 0x7ad0ac })
+    this.circleFirst = new THREE.Mesh(geometry, material1)
+    this.circleSecond = new THREE.Mesh(geometry, material2)
+    this.circleThird = new THREE.Mesh(geometry, material3)
+    this.circleFirst.position.set(0, -0.19, 0)
+    this.circleSecond.position.set(0, -0.18, 0)
+    this.circleThird.position.set(0, -0.17, 0)
+    this.circleFirst.scale.set(0, 0, 0)
+    this.circleSecond.scale.set(0, 0, 0)
+    this.circleThird.scale.set(0, 0, 0)
+    this.circleFirst.rotation.x =
+      this.circleSecond.rotation.x =
+      this.circleThird.rotation.x =
+        -Math.PI / 2
+
+    this.circleFirst.receiveShadow =
+      this.circleSecond.receiveShadow =
+      this.circleThird.receiveShadow =
+        true
+
+    this.scene.add(this.circleFirst)
+    this.scene.add(this.circleSecond)
+    this.scene.add(this.circleThird)
   }
 
   // 窗口尺寸改变触发事件

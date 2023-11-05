@@ -36,7 +36,7 @@ export default class Camera {
       -50,
       50
     )
-    this.orthographicCamera.position.set(0, 3.5, 5)
+    this.orthographicCamera.position.set(0, 2.9, 5)
     this.orthographicCamera.rotation.set(-Math.PI / 6, 0, 0)
     this.scene.add(this.orthographicCamera)
 

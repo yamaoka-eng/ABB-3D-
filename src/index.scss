@@ -14,6 +14,10 @@
   --color-background-dark: #8395cd;
 }
 
+body {
+  @apply overflow-hidden;
+}
+
 .light-theme {
   --color-text: var(--color-text-light);
   --color-background: var(--color-background-light);

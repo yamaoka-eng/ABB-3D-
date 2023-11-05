@@ -11,11 +11,26 @@ export class Sizes extends EventEmitter {
 
     this.timeoutId = null // 用于存储定时器的 ID
 
+    if (this.width < 768) {
+      this.device = 'mobile'
+    } else {
+      this.device = 'desktop'
+    }
+
     window.addEventListener('resize', () => {
       this.width = window.innerWidth
       this.height = window.innerHeight
       this.aspectRatio = this.width / this.height
       this.pixelRatio = Math.min(window.devicePixelRatio, 2)
+
+      if (this.width < 768) {
+        this.device = 'mobile'
+        this.emit('switchdevice', this.device)
+      } else {
+        this.device = 'desktop'
+        this.emit('switchdevice', this.device)
+      }
+
       this.emit('resize')
     })
   }
@@ -68,11 +83,24 @@ export class Theme extends EventEmitter {
   }
 }
 
+export const covertDivs = element => {
+  element.style.overflow = 'hidden'
+  element.innerHTML = element.innerText
+    .split('')
+    .map(char =>
+      char === ' '
+        ? `<span>&nbsp;</span>`
+        : `<div class='overflow-hidden flex justify-center items-center'><span class='animatedis'>${char}</span></div>`
+    )
+    .join('')
+  return element
+}
+
 export const assets = [
   {
     name: 'room',
     type: 'glbModel',
-    path: '/models/room.glb'
+    path: '/models/网页小屋.glb'
   },
   {
     name: 'screen',

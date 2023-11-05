@@ -16,20 +16,17 @@ export default class Room {
 
     this.room = this.resources.items.room
     this.actualRoom = this.room.scene
+    this.roomChildren = {}
 
-    this.lerp = {
-      current: 0,
-      target: 0,
-      ease: 0.1
-    }
+    this.rectLight = {}
 
     this.setModel()
     this.setAnimation()
-    this.onMouseMove()
   }
 
   setModel() {
     this.actualRoom.children.forEach(child => {
+      child.scale.set(0, 0, 0)
       child.castShadow = true // 投射阴影
       child.receiveShadow = true // 接受阴影
       if (child instanceof THREE.Group) {
@@ -38,60 +35,80 @@ export default class Room {
           child.receiveShadow = true // 接受阴影
         })
       }
-      if (child.name === '显示器屏幕') {
-        child.material = new THREE.MeshBasicMaterial({
-          map: this.resources.items.screen
+      if (child.name === '显示器') {
+        child.children.forEach(child => {
+          if (child.material.name === '电脑屏幕') {
+            child.material = new THREE.MeshBasicMaterial({
+              map: this.resources.items.screen,
+              name: '电脑屏幕'
+            })
+          }
         })
       }
-      if (child.name === '鱼缸玻璃') {
-        child.material = new THREE.MeshPhysicalMaterial()
-        child.material.roughness = 0
-        child.material.color.set(0x549dd2)
-        child.material.ior = 1.45
-        child.material.transmission = 1
-        child.material.opacity = 1
+      if (child.name === '鱼缸') {
+        child.children.forEach(child => {
+          if (child.material.name === '鱼缸') {
+            child.material = new THREE.MeshPhysicalMaterial()
+            child.material.roughness = 0
+            child.material.color.set(0x549dd2)
+            child.material.ior = 1.45
+            child.material.transmission = 1
+            child.material.opacity = 1
+          }
+        })
       }
+      if (child.name === '迷你地板') {
+        const { x, y, z } = child.position
+        this.miniFloor = { x, y, z }
+        child.position.set(
+          this.miniFloor.x,
+          this.miniFloor.y,
+          this.miniFloor.z - z * 0.5
+        )
+      }
+      if (child.name === '遮挡立方体') {
+        child.scale.set(1, 1, 1)
+        child.position.set(0, 0, 0)
+      }
+
+      this.roomChildren[child.name.toLowerCase()] = child
     })
     // 创建一个 THREE.Group 对象用于包裹模型
     this.modelGroup = new THREE.Group()
 
     // 添加模型到该组
-    this.modelGroup.add(this.actualRoom) // 用你实际的模型替换 yourModel
-    this.scene.add(this.modelGroup)
+    this.actualRoom.position.set(0, 0, 0)
     this.actualRoom.rotation.y = -Math.PI / 4
-    this.actualRoom.position.set(0, 0, -1.6)
     this.actualRoom.scale.set(0.11, 0.11, 0.11)
+    this.modelGroup.add(this.actualRoom) // 用你实际的模型替换 yourModel
+    this.modelGroup.scale.set(0, 0, 0)
+    this.scene.add(this.modelGroup)
 
-    const width = 0.5
-    const height = 0.8
+    // 把矩形灯光加入到鱼缸
+    this.rectLight.width = 0.5
+    this.rectLight.height = 0.8
     const intensity = 2
     const rectLight = new THREE.RectAreaLight(
       0xffffff,
       intensity,
-      width,
-      height
+      this.rectLight.width,
+      this.rectLight.height
     )
     rectLight.position.set(0.9, 1.05, -0.2)
     rectLight.rotation.x = -Math.PI / 2
     rectLight.rotation.z = Math.PI / 4
     this.modelGroup.add(rectLight)
+    this.roomChildren['rectLight'] = rectLight
 
+    // 灯光辅助
     // const rectLightHelper = new RectAreaLightHelper(rectLight)
     // rectLight.add(rectLightHelper)
   }
 
+  // 播放动画
   setAnimation() {
     this.mixer = new THREE.AnimationMixer(this.actualRoom)
     this.room.animations.forEach(item => this.mixer.clipAction(item).play())
-  }
-
-  onMouseMove() {
-    window.addEventListener('mousemove', event => {
-      // 让旋转值维持在 -1 ~ 1 之间
-      this.rotation =
-        ((event.clientX - window.innerWidth / 2) * 2) / window.innerWidth
-      this.lerp.target = this.rotation * 0.1
-    })
   }
 
   // 窗口尺寸改变触发事件
@@ -100,13 +117,5 @@ export default class Room {
   update(delta) {
     // 播放动画
     this.mixer.update(delta)
-
-    // 使用gsap进行插值
-    this.lerp.current = gsap.utils.interpolate(
-      this.lerp.current,
-      this.lerp.target,
-      this.lerp.ease
-    )
-    this.modelGroup.rotation.y = this.lerp.current
   }
 }

@@ -1,98 +1,38 @@
 import { useRef, useEffect, useLayoutEffect } from 'react'
-import { LuSunMedium, LuMoon } from 'react-icons/lu'
+import { LuSunMedium, LuMoon, LuChevronDown } from 'react-icons/lu'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Experience from './experience/experience'
-
 import './App.scss'
 
 function App() {
   const canvasRef = useRef(null)
-  gsap.registerPlugin(ScrollTrigger)
 
   // 实列控制模块
   useEffect(() => {
     new Experience(canvasRef.current)
   }, [])
 
-  // section圆角动画效果
-  useLayoutEffect(() => {
-    const leftElements = document.querySelectorAll('.left')
-    const rightElements = document.querySelectorAll('.right')
-    leftElements.forEach(element => {
-      gsap.timeline().to(element, {
-        borderTopRightRadius: `50px`,
-        scrollTrigger: {
-          trigger: element,
-          // markers: true,
-          start: '10% bottom',
-          end: 'top top',
-          scrub: 0.1
-        }
-      })
-      gsap.timeline().to(element, {
-        borderBottomRightRadius: `500px`,
-        scrollTrigger: {
-          trigger: element,
-          // markers: true,
-          start: '105% bottom',
-          end: 'bottom top',
-          scrub: 0.1
-        }
-      })
-    })
-    rightElements.forEach(element => {
-      gsap.timeline().to(element, {
-        borderTopLeftRadius: `50px`,
-        scrollTrigger: {
-          trigger: element,
-          // markers: true,
-          start: '5% bottom',
-          end: 'top top',
-          scrub: 0.1
-        }
-      })
-      gsap.timeline().to(element, {
-        borderBottomLeftRadius: `500px`,
-        scrollTrigger: {
-          trigger: element,
-          // markers: true,
-          start: '105% bottom',
-          end: 'bottom top',
-          scrub: 0.1
-        }
-      })
-    })
-  }, [])
-
-  // section进度条动画效果
-  useLayoutEffect(() => {
-    const progress = document.querySelectorAll('.progress-bar-wrapper')
-    console.log(progress)
-    progress.forEach(element => {
-      console.log(element)
-      gsap.timeline().to(element.children[0], {
-        height: `100%`,
-        scrollTrigger: {
-          trigger: element,
-          markers: true,
-          start: '20% bottom',
-          end: '105% top',
-          scrub: 0.1
-        }
-      })
-    })
-  }, [])
-
   return (
     <>
-      {/* 背景 */}
+      {/* 3D背景 */}
       <div className="experience">
         <canvas className="experience-canvas" ref={canvasRef}></canvas>
       </div>
 
+      {/* 加载动画 */}
+      <div className="preloader">
+        <div className="preloader-wrapper">
+          <div className="loading">
+            <div className="circle"></div>
+            <div className="circle"></div>
+            <div className="circle"></div>
+          </div>
+        </div>
+      </div>
+
       {/* 内容 */}
-      <div className="page">
+      <div className="page opacity-0" asscroll-container="true">
         <div className="toggle-bar">
           <div className="sun-wrapper">
             <LuSunMedium className="w-[80%] h-[80%]"></LuSunMedium>
@@ -105,23 +45,29 @@ function App() {
           </div>
         </div>
 
-        <div className="page-wrapper">
+        <div className="page-wrapper" asscroll="true">
           <div className="hero">
             <div className="hero-wrapper">
-              <div className="hero-main">
-                <h1 className="hero-main-title">Abigail Bloom</h1>
-                <p className="hero-main-description">
-                  Digital Media student | 3D Artist
-                </p>
+              <div className="intro-text">Welcome to my portfolio!</div>
+              <div className="arrow-svg-warpper animate-bounce opacity-0">
+                <LuChevronDown></LuChevronDown>
               </div>
-              <div className="hero-second">
-                <p className="hero-second-subheading">AbigailBloom</p>
-                <p className="hero-second-subheading">Portfolio</p>
+              <div className="hero-main">
+                <div className="hero-second">
+                  <p className="hero-second-subheading">AbigailBloom</p>
+                  <p className="hero-second-subheading second-sub">Portfolio</p>
+                </div>
+                <div>
+                  <h1 className="hero-main-title">Abigail Bloom</h1>
+                  <p className="hero-main-description">
+                    Digital Media student | 3D Artist
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-          <div className="frist-move section-margin"></div>
-          <section className="first-section section left">
+          <div className="first-move section-margin"></div>
+          <section className="first-section section left-section">
             <div className="progress-bar-wrapper left-bar">
               <div className="progress pink-background"></div>
             </div>
@@ -161,7 +107,7 @@ function App() {
 
           <div className="second-move section-margin"></div>
 
-          <section className="second-section section right">
+          <section className="second-section section right-section">
             <div className="progress-bar-wrapper right-bar">
               <div className="progress blue-background"></div>
             </div>
@@ -199,7 +145,7 @@ function App() {
             </div>
           </section>
           <div className="third-move section-margin"></div>
-          <section className="third-section section left">
+          <section className="third-section section left-section">
             <div className="progress-bar-wrapper left-bar">
               <div className="progress green-background"></div>
             </div>

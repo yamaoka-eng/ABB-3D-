@@ -1,27 +1,36 @@
 import * as THREE from 'three'
+import { EventEmitter } from 'events'
 import Room from './room'
 import Environment from './environment'
-import Controls from './controls'
 import Experience from '../experience'
+import Controls from './controls'
 import Floor from './Floor'
 
-export default class World {
+export default class World extends EventEmitter {
   constructor() {
+    super()
     this.experience = new Experience()
     this.sizes = this.experience.sizes
     this.scene = this.experience.scene
     this.canvas = this.experience.canvas
     this.camera = this.experience.camera
+    this.environment = new Environment()
     this.resources = this.experience.resources
     this.theme = this.experience.theme
     this.allowUpdates = false
 
     this.resources.on('all loaded', () => {
-      this.environment = new Environment()
       this.room = new Room()
       this.floor = new Floor()
-      this.controls = new Controls()
-      this.allowUpdates = true
+      this.emit('world ready')
+    })
+
+    this.experience.on('preloader loaded', () => {
+      this.preloader = this.experience.preloader
+      this.preloader.on('enablecontrols', () => {
+        this.controls = new Controls()
+        this.allowUpdates = true
+      })
     })
 
     // 创建一个坐标系辅助对象
