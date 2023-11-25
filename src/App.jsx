@@ -1,7 +1,6 @@
-import { useRef, useEffect, useLayoutEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { LuSunMedium, LuMoon, LuChevronDown } from 'react-icons/lu'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Spline from '@splinetool/react-spline'
 import Experience from './experience/experience'
 import './App.scss'
 
@@ -182,6 +181,7 @@ function App() {
               </p>
             </div>
           </section>
+          <Spline scene="https://prod.spline.design/SkYcRqLnWOAIzI6o/scene.splinecode" />
         </div>
       </div>
     </>
